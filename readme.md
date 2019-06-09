@@ -4,6 +4,12 @@
 
 `comment.xml`互換のツールで利用することができます。
 
+## ダウンロード
+
+下記のURLから最新のものをダウンロードできます。
+
+<https://github.com/totoraj930/NiCommentGenerator/archive/master.zip>
+
 ## 使い方
 
 1. `NiCommentGenerator.html`が入っているフォルダごと`comment.xml`があるフォルダに配置します。
