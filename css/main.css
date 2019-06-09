@@ -1,0 +1,78 @@
+
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    overflow: hidden;
+}
+
+:root {
+    --cLineHeight: 1.4;
+    --cDuration: 5000ms;
+    --cColor: #fff;
+    --cFontSize: 7.14vh;
+    --cFontWeight: bold;
+    --cFontFamily: "Helvetica Neue", "メイリオ", Meiryo, Helvetica, Arial, sans-serif;
+    --cTextShadow:
+        0 0 5px #000,
+        0 0 5px #000,
+        0 0 5px #000,
+        0 0 5px #000,
+        0 0 5px #000,
+        0 0 5px #000,
+        0 0 5px #000,
+        0 0 5px #000,
+        0 0 5px #000
+    ;
+    --cLengthLimit: 31em;
+}
+
+.wrap {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.line {
+    position: relative;
+    color: var(--cColor);
+    line-height: var(--cLineHeight);
+    font-size: var(--cFontSize);
+    font-weight: var(--cFontWeight);
+    font-family: var(--cFontFamily);
+}
+.line::before {
+    content: "ダミーDummy";
+    color: transparent;
+    text-shadow: none;
+}
+
+.comment {
+    position: absolute;
+    max-width: var(--cLengthLimit);
+    overflow: hidden;
+    top: 0;
+    padding: 0 var(--cFontSize);
+    text-overflow: ellipsis;
+    text-shadow: var(--cTextShadow);
+    white-space: nowrap;
+    animation: var(--cDuration) commentAnimation linear forwards;
+}
+
+@keyframes commentAnimation {
+    0% {
+        left: 100%;
+        transform: translateX(0%);
+    }
+    100% {
+        left: 0%;
+        transform: translateX(-100%);
+    }
+}
