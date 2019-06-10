@@ -47,7 +47,7 @@ const OPTIONS = {
 
     // 表示形式指定
     // ($NAME$が名前、$COMMENT$がコメントに置き換えられます)
-    format: "$COMMENT$",
+    format: "$NAME$: $COMMENT$",
 
     // コメジェネのcomment.xmlへのパス
     // 相対パスで指定してください
