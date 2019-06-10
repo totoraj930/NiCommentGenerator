@@ -126,12 +126,11 @@ DisplayLine = class DisplayLine {
         this._comments.push(comment);
         this.$elm.appendChild(comment.$elm);
 
-        const that = this;
         comment.$elm.addEventListener("animationend", () => {
             const i = this._comments.indexOf(comment);
             this._comments.splice(i, 1);
             comment.$elm.remove();
-            that.emit("passed", comment);
+            this.emit("passed", comment);
         });
     }
 }

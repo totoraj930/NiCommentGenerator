@@ -1,7 +1,7 @@
 class LoadManager {
-    constructor(path, loadInterval) {
-        this._path = path || "../comment.xml";
-        this._loadInterval = Math.min(3*1000, Math.max(500, loadInterval || 500));
+    constructor(path="../comment.xml", loadInterval=500) {
+        this._path = path;
+        this._loadInterval = Math.min(3*1000, Math.max(500, loadInterval));
 
         this._$prevXML = null;
 
@@ -63,12 +63,11 @@ class LoadManager {
     }
 
     _reserveEmitComment(commentData) {
-        const that = this;
         const id = this.generateUuid();
         this._emitTimers[id] = setTimeout(
             () => {
-                that.emit("comment", commentData);
-                delete that._emitTimers[id];
+                this.emit("comment", commentData);
+                delete this._emitTimers[id];
             }
             ,
             Math.max(
