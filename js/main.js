@@ -8,7 +8,7 @@ class NiCommentManager {
         this._$elm.className = "wrap";
 
         this._$dummyLine = document.createElement("div");
-        this._$dummyLine.className = "dummy";
+        this._$dummyLine.className = "line dummy";
 
         this._lines = [];
         this._comments = [];
