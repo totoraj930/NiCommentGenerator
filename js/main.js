@@ -7,7 +7,7 @@ class NiCommentManager {
         this._$elm = document.createElement("ul");
         this._$elm.className = "wrap";
 
-        this._$dummyLine = document.createElement("li");
+        this._$dummyLine = document.createElement("div");
         this._$dummyLine.className = "dummy";
 
         this._lines = [];
@@ -74,7 +74,7 @@ class NiCommentManager {
     addComment(commentData) {
         const comment = new Comment(commentData, this._ops.format);
         this._comments.push(comment);
-        
+
         let cWidth = this.getCommentWidth(comment);
         let targetLineNum = 0;
         let minCollisionTime = 999999;
