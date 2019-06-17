@@ -70,7 +70,7 @@ Comment = class Comment {
 
 DisplayLine = class DisplayLine {
     constructor() {
-        this._$elm = document.createElement("div");
+        this._$elm = document.createElement("li");
         this._$elm.className = "line";
 
         this._comments = [];
@@ -119,6 +119,29 @@ DisplayLine = class DisplayLine {
             }
         });
         return Math.max(val, 0);
+    }
+
+    // 渡された横幅のコメントが追加された場合の衝突する時間を返す(値が小さいほど衝突しない)
+    calcCollisionTime(cWidth) {
+        let wrapWidth = this.$elm.clientWidth;
+        let cLeftArrivalTime = wrapWidth / (cWidth + wrapWidth);
+        let collisionTime = (1 - this.minProgress()) - cLeftArrivalTime;
+        return collisionTime;
+    }
+
+    // 一番進んでいないコメントの進み具合が0-1で返される
+    minProgress() {
+        let minProgress = 1;
+        let wrapWidth = this.$elm.clientWidth;
+        this._comments.forEach(comment => {
+            let cLeft = comment.$elm.offsetLeft;
+            let cWidth = comment.$elm.clientWidth;
+            let progress = 1 - (cWidth + cLeft) / (cWidth + wrapWidth);
+            if (minProgress > progress) {
+                minProgress = progress;
+            }
+        });
+        return minProgress;
     }
 
     addComment(comment) {

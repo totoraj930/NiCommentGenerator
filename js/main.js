@@ -4,8 +4,11 @@ document.addEventListener("DOMContentLoaded", start);
 class NiCommentManager {
     constructor(options) {
         this._ops = options;
-        this._$elm = document.createElement("section");
+        this._$elm = document.createElement("ul");
         this._$elm.className = "wrap";
+
+        this._$dummyLine = document.createElement("li");
+        this._$dummyLine.className = "dummy";
 
         this._lines = [];
         this._comments = [];
@@ -17,6 +20,10 @@ class NiCommentManager {
     }
     get $elm() {
         return this._$elm;
+    }
+
+    get $dummyLine() {
+        return this._$dummyLine;
     }
 
     onPassed(comment) {
@@ -67,20 +74,43 @@ class NiCommentManager {
     addComment(commentData) {
         const comment = new Comment(commentData, this._ops.format);
         this._comments.push(comment);
+        
+        let cWidth = this.getCommentWidth(comment);
         let targetLineNum = 0;
-        let minCongestionValue = 999999;
-        this._lines.forEach((line, i) => {
-            let cVal = line.congestionValue();
-            if (cVal < minCongestionValue) {
+        let minCollisionTime = 999999;
+        let minCongestionVal = 999999;
+
+        for (let i=0; i < this._lines.length; i++) {
+            const line = this._lines[i];
+            const cTime = Math.max(0, line.calcCollisionTime(cWidth));
+            const cVal = line.congestionValue();
+            // 衝突時間と開幕の衝突量が両方0ならその行を使う
+            if (cTime == 0 && cVal == 0) {
                 targetLineNum = i;
-                minCongestionValue = cVal;
+                break;
             }
-        });
+            // 衝突時間が短くてなおかつ開幕の衝突量も少なければその行を使う
+            if (cTime < minCollisionTime && cVal <= minCongestionVal) {
+                targetLineNum = i;
+                minCollisionTime = cTime;
+                minCongestionVal = cVal;
+            }
+        }
+
         this._lines[targetLineNum].addComment(comment);
+    }
+
+    getCommentWidth(comment) {
+        const $comment = comment.$elm.cloneNode(true);
+        this.$dummyLine.appendChild($comment);
+        const cWidth = $comment.clientWidth;
+        $comment.remove();
+        return cWidth;
     }
 }
 
 const cManager = new NiCommentManager(OPTIONS);
 function start() {
     document.body.appendChild(cManager.$elm);
+    document.body.appendChild(cManager.$dummyLine);
 }

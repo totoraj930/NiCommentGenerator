@@ -54,6 +54,7 @@ html, body {
     text-shadow: none;
 }
 
+
 .comment {
     position: absolute;
     max-width: var(--cLengthLimit);
@@ -65,6 +66,18 @@ html, body {
     white-space: nowrap;
     animation: var(--cDuration) commentAnimation linear forwards;
 }
+
+.line.dummy {
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+.line.dummy .comment {
+    visibility: hidden;
+    opacity: 0;
+    animation: none;
+}
+
 
 @keyframes commentAnimation {
     0% {
