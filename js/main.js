@@ -7,8 +7,10 @@ class NiCommentManager {
         this._$elm = document.createElement("ul");
         this._$elm.className = "wrap";
 
-        this._$dummyLine = document.createElement("div");
+        this._$dummyLine = document.createElement("li");
         this._$dummyLine.className = "line dummy";
+
+        this.$elm.appendChild(this.$dummyLine);
 
         this._lines = [];
         this._comments = [];
@@ -112,5 +114,4 @@ class NiCommentManager {
 const cManager = new NiCommentManager(OPTIONS);
 function start() {
     document.body.appendChild(cManager.$elm);
-    document.body.appendChild(cManager.$dummyLine);
 }
