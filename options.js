@@ -39,7 +39,7 @@ const OPTIONS = {
     // 透明度
     // (0.0-1.0で指定します。0.0に近いほど透明になります)
     // (CSSのopacity書式)
-    opacity: 0.8,
+    opacity: 0.6,
 
     // 表示する文字数制限
     // (超えた場合「…」で省略されます)
@@ -47,12 +47,12 @@ const OPTIONS = {
 
     // 表示形式指定
     // ($NAME$が名前、$COMMENT$がコメントに置き換えられます)
-    format: "$NAME$: $COMMENT$",
+    format: "$COMMENT$",
 
     // コメジェネのcomment.xmlへのパス
     // 相対パスで指定してください
     path: "../comment.xml",
 
     // comment.xmlの読み込み間隔(ミリ秒)
-    loadInterval: 500
-}
+    loadInterval: 500,
+};
