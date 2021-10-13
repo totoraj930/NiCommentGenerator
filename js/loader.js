@@ -1,7 +1,7 @@
 class LoadManager {
-    constructor(path="../comment.xml", loadInterval=500) {
+    constructor(path = "../comment.xml", loadInterval = 500) {
         this._path = path;
-        this._loadInterval = Math.min(3*1000, Math.max(500, loadInterval));
+        this._loadInterval = Math.min(3 * 1000, Math.max(500, loadInterval));
 
         this._$prevXML = null;
 
@@ -12,7 +12,7 @@ class LoadManager {
         this._emitTimers = {};
 
         this._listeners = {
-            comment: []
+            comment: [],
         };
     }
 
@@ -26,7 +26,7 @@ class LoadManager {
             this._timer = null;
         }
         const keys = Object.keys(this._emitTimers);
-        keys.forEach(key => {
+        keys.forEach((key) => {
             clearTimeout(this._emitTimers[key]);
             delete this._emitTimers[key];
         });
@@ -49,7 +49,7 @@ class LoadManager {
             // 前回の読み込み時間を更新
             this._prevLoadTime = Date.now();
             this._$prevXML = xml;
-        } catch(error) {
+        } catch (error) {
             // alert(error);
         }
         this._timer = setTimeout(
@@ -59,56 +59,37 @@ class LoadManager {
     }
 
     _reserveEmitComments(commentDatas) {
-        commentDatas.forEach(commentData => this._reserveEmitComment(commentData));
+        commentDatas.forEach((commentData) =>
+            this._reserveEmitComment(commentData)
+        );
     }
 
     _reserveEmitComment(commentData) {
         const id = this.generateUuid();
-        this._emitTimers[id] = setTimeout(
-            () => {
-                this.emit("comment", commentData);
-                delete this._emitTimers[id];
-            }
-            ,
-            Math.max(
-                0,
-                Math.min(
-                    commentData.time - this._prevLoadTime,
-                    this._loadInterval
-                )
-            )
-        );
+        this._emitTimers[id] = setTimeout(() => {
+            this.emit("comment", commentData);
+            delete this._emitTimers[id];
+        }, Math.max(0, Math.min(commentData.time - this._prevLoadTime, this._loadInterval)));
     }
 
     _getNewCommentDatas(xml) {
         const $prevLast = this._$prevXML.querySelector("log").lastElementChild;
         const $comments = xml.querySelectorAll("comment");
-        let nextIndex = 0;
-        for (let i=0; i < $comments.length; i++) {
-            const $comment = $comments[i];
-            if (
-                $comment.innerHTML == $prevLast.innerHTML &&
-                $comment.getAttribute("handle") == $prevLast.getAttribute("handle") &&
-                $comment.getAttribute("time") == $prevLast.getAttribute("time") &&
-                $comment.getAttribute("service") == $prevLast.getAttribute("service")
-            ) {
-                nextIndex = i+1;
-                break;
-            }
-        }
-        
-        const $newComments = [].slice.call($comments, nextIndex);
 
-        const newCommentDatas = $newComments.map($comment => {
-            return new CommentData(
-                $comment.innerHTML,
-                $comment.getAttribute("handle"),
-                $comment.getAttribute("time")　* 1000,
-                $comment.getAttribute("service")
-            );
-        });
-
-        return newCommentDatas;
+        return Array.from($comments)
+            .filter(
+                ($comment) =>
+                    $comment.getAttribute("time") >
+                    $prevLast.getAttribute("time")
+            )
+            .map(($comment) => {
+                return new CommentData(
+                    $comment.innerHTML,
+                    $comment.getAttribute("handle"),
+                    $comment.getAttribute("time") * 1000,
+                    $comment.getAttribute("service")
+                );
+            });
     }
 
     _getXML(path) {
@@ -116,10 +97,10 @@ class LoadManager {
             const xhr = new XMLHttpRequest();
             xhr.open("GET", path);
             xhr.send();
-            xhr.onloadend = event => {
+            xhr.onloadend = (event) => {
                 resolve(xhr.responseXML);
             };
-            xhr.onerror = event => {
+            xhr.onerror = (event) => {
                 reject(event);
             };
         });
@@ -163,8 +144,6 @@ class LoadManager {
     }
     emit(eventName, ...args) {
         if (!this._listeners[eventName]) return false;
-        this._listeners[eventName].forEach(cb => cb(...args));
+        this._listeners[eventName].forEach((cb) => cb(...args));
     }
-
-
 }
